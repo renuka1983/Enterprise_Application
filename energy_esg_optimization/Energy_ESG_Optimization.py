@@ -14,10 +14,17 @@ import seaborn as sns
 from datetime import datetime, timedelta
 
 # Import custom modules
-from energy_esg_optimization.data.energy_synthetic_data import generate_sample_data
-from energy_esg_optimization.models.ml_forecasting import EnergyConsumptionForecaster
-from energy_esg_optimization.ai.optimization_engine import EnergyOptimizationEngine
-from energy_esg_optimization.genai.esg_report_generator import ESGReportGenerator
+try:
+    from .data.energy_synthetic_data import generate_sample_data
+    from .models.ml_forecasting import EnergyConsumptionForecaster
+    from .ai.optimization_engine import EnergyOptimizationEngine
+    from .genai.esg_report_generator import ESGReportGenerator
+except ImportError:
+    # Fallback for direct execution
+    from data.energy_synthetic_data import generate_sample_data
+    from models.ml_forecasting import EnergyConsumptionForecaster
+    from ai.optimization_engine import EnergyOptimizationEngine
+    from genai.esg_report_generator import ESGReportGenerator
 
 # Page configuration
 st.set_page_config(

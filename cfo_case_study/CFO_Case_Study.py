@@ -7,9 +7,9 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 # Import utility modules (now in same directory)
-from cfo_synthetic_data import generate_cfo_financial_data, create_financial_dashboard, save_to_csv
-from cfo_forecasting import traditional_forecasting, ml_forecasting, ai_forecasting_with_shap, create_forecast_comparison
-from cfo_genai import simulate_openai_analysis, analyze_financial_health
+from .cfo_synthetic_data import generate_cfo_financial_data, create_financial_dashboard, save_to_csv
+from .cfo_forecasting import traditional_forecasting, ml_forecasting, ai_forecasting_with_shap, create_forecast_comparison
+from .cfo_genai import simulate_openai_analysis, analyze_financial_health
 
 # Page configuration
 st.set_page_config(

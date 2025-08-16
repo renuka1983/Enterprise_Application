@@ -6,13 +6,13 @@ import plotly.express as px
 from plotly.subplots import make_subplots
 
 # Import utility modules
-from hr_synthetic_data import generate_synthetic_hr_data, create_hr_dashboard, create_attrition_heatmap, save_to_csv
-from hr_ml_prediction import (prepare_features_for_ml, train_logistic_regression, train_random_forest,
+from .hr_synthetic_data import generate_synthetic_hr_data, create_hr_dashboard, create_attrition_heatmap, save_to_csv
+from .hr_ml_prediction import (prepare_features_for_ml, train_logistic_regression, train_random_forest,
                              create_model_comparison, create_feature_importance_comparison,
                              create_confusion_matrix_heatmap, predict_attrition_for_employee,
                              generate_retention_recommendations)
-from hr_ai_agents import MultiAgentSystem
-from hr_genai import simulate_openai_analysis, create_hr_chatbot_interface
+from .hr_ai_agents import MultiAgentSystem
+from .hr_genai import simulate_openai_analysis, create_hr_chatbot_interface
 
 # Page configuration
 st.set_page_config(
