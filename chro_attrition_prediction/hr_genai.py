@@ -5,10 +5,16 @@ import plotly.graph_objects as go
 import plotly.express as px
 from plotly.subplots import make_subplots
 import os
-from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv()
+# Try to import dotenv, but make it optional
+try:
+    from dotenv import load_dotenv
+    DOTENV_AVAILABLE = True
+    # Load environment variables
+    load_dotenv()
+except ImportError:
+    DOTENV_AVAILABLE = False
+    st.info("ℹ️ python-dotenv not available. Environment variables will be loaded from system or Streamlit secrets.")
 
 def get_openai_api_key():
     """Get OpenAI API key from environment variables or Streamlit secrets."""

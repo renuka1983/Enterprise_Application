@@ -10,12 +10,18 @@ import plotly.graph_objects as go
 import plotly.express as px
 from plotly.subplots import make_subplots
 import os
-from dotenv import load_dotenv
 import json
 from datetime import datetime, timedelta
 
-# Load environment variables
-load_dotenv()
+# Try to import dotenv, but make it optional
+try:
+    from dotenv import load_dotenv
+    DOTENV_AVAILABLE = True
+    # Load environment variables
+    load_dotenv()
+except ImportError:
+    DOTENV_AVAILABLE = False
+    # Note: st.info not available in this context, so we'll handle it silently
 
 class ESGReportGenerator:
     """

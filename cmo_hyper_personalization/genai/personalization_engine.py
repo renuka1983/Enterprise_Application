@@ -7,11 +7,17 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 import os
-from dotenv import load_dotenv
 import json
 
-# Load environment variables
-load_dotenv()
+# Try to import dotenv, but make it optional
+try:
+    from dotenv import load_dotenv
+    DOTENV_AVAILABLE = True
+    # Load environment variables
+    load_dotenv()
+except ImportError:
+    DOTENV_AVAILABLE = False
+    st.info("ℹ️ python-dotenv not available. Environment variables will be loaded from system or Streamlit secrets.")
 
 class TubesIndiaPersonalizationEngine:
     """
