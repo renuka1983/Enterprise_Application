@@ -12,12 +12,23 @@ from plotly.subplots import make_subplots
 
 # Import modules
 try:
+    # Layer 1: Relative imports (package context)
     from .data.synthetic_data import ManufacturingDataGenerator, generate_sample_data
     from .models.ml_models import CampaignResponsePredictor, CustomerSegmentation
 except ImportError:
-    # Fallback for direct execution or when imported from page wrapper
-    from data.synthetic_data import ManufacturingDataGenerator, generate_sample_data
-    from models.ml_models import CampaignResponsePredictor, CustomerSegmentation
+    try:
+        # Layer 2: Absolute imports (direct execution)
+        from data.synthetic_data import ManufacturingDataGenerator, generate_sample_data
+        from models.ml_models import CampaignResponsePredictor, CustomerSegmentation
+    except ImportError:
+        # Layer 3: Dynamic path addition (final fallback)
+        import os
+        import sys
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        if current_dir not in sys.path:
+            sys.path.insert(0, current_dir)
+        from data.synthetic_data import ManufacturingDataGenerator, generate_sample_data
+        from models.ml_models import CampaignResponsePredictor, CustomerSegmentation
 
 # Page configuration
 st.set_page_config(
