@@ -382,12 +382,13 @@ def main():
         
         if st.button("🚀 Run AI Forecast"):
             with st.spinner("Running AI pipeline with SHAP analysis..."):
-                df_ai, pipeline, feature_cols, metrics, shap_values, X_test = ai_forecasting_with_shap(df, forecast_months)
+                df_ai, pipeline, feature_cols, metrics, shap_values, X_test, feature_importance = ai_forecasting_with_shap(df, forecast_months)
                 st.session_state.df_ai = df_ai
                 st.session_state.pipeline = pipeline
                 st.session_state.ai_metrics = metrics
                 st.session_state.shap_values = shap_values
                 st.session_state.X_test = X_test
+                st.session_state.feature_importance = feature_importance
                 
                 st.success("✅ AI forecasting completed!")
                 
@@ -406,6 +407,41 @@ def main():
                 # Show features used
                 st.subheader("🔍 AI Features Used")
                 st.write(f"**{len(feature_cols)} advanced features**: {', '.join(feature_cols[:10])}...")
+                
+                # Show feature importance or SHAP info
+                if st.session_state.get('feature_importance') is not None:
+                    st.subheader("📊 Feature Importance Analysis")
+                    importance_df = pd.DataFrame([
+                        {'Feature': feature, 'Importance': importance}
+                        for feature, importance in st.session_state.feature_importance.items()
+                    ]).sort_values('Importance', ascending=False)
+                    
+                    # Create feature importance bar chart
+                    fig = go.Figure(data=[
+                        go.Bar(
+                            x=importance_df['Feature'],
+                            y=importance_df['Importance'],
+                            marker_color='lightblue'
+                        )
+                    ])
+                    fig.update_layout(
+                        title="Feature Importance for Cash On Hand Prediction",
+                        xaxis_title="Features",
+                        yaxis_title="Importance Score",
+                        height=400,
+                        showlegend=False
+                    )
+                    fig.update_xaxes(tickangle=45)
+                    st.plotly_chart(fig, use_container_width=True)
+                    
+                    # Show top features table
+                    st.subheader("🏆 Top 10 Most Important Features")
+                    st.dataframe(importance_df.head(10), use_container_width=True)
+                    
+                elif st.session_state.get('shap_values') is not None:
+                    st.info("✅ SHAP explainability available for detailed feature analysis")
+                else:
+                    st.warning("⚠️ Feature importance analysis not available")
         
         if 'df_ai' in st.session_state:
             st.subheader("📈 AI Forecast Visualization")

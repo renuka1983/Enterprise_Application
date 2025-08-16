@@ -9,7 +9,15 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-import shap
+
+# Try to import SHAP, but make it optional
+try:
+    import shap
+    SHAP_AVAILABLE = True
+except ImportError:
+    SHAP_AVAILABLE = False
+    shap = None
+
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -206,10 +214,30 @@ def ai_forecasting_with_shap(df, forecast_months=3):
     mae = mean_absolute_error(y_test, y_pred)
     r2 = r2_score(y_test, y_pred)
     
-    # SHAP explainability
-    explainer = shap.TreeExplainer(pipeline.named_steps['regressor'])
-    X_scaled = pipeline.named_steps['scaler'].transform(X_test)
-    shap_values = explainer.shap_values(X_scaled)
+    # SHAP explainability (if available)
+    if SHAP_AVAILABLE and shap is not None:
+        try:
+            explainer = shap.TreeExplainer(pipeline.named_steps['regressor'])
+            X_scaled = pipeline.named_steps['scaler'].transform(X_test)
+            shap_values = explainer.shap_values(X_scaled)
+        except Exception as e:
+            st.warning(f"SHAP explainability not available: {str(e)}")
+            shap_values = None
+    else:
+        shap_values = None
+        st.info("SHAP library not available. Feature importance will be shown instead.")
+    
+    # Get feature importance as fallback when SHAP is not available
+    feature_importance = None
+    if not SHAP_AVAILABLE or shap_values is None:
+        try:
+            # Get feature importance from the Random Forest model
+            rf_model = pipeline.named_steps['regressor']
+            if hasattr(rf_model, 'feature_importances_'):
+                feature_importance = dict(zip(feature_cols, rf_model.feature_importances_))
+        except Exception as e:
+            st.warning(f"Could not extract feature importance: {str(e)}")
+            feature_importance = None
     
     # Prepare forecast data
     last_row = df_ai.iloc[-1]
@@ -277,7 +305,7 @@ def ai_forecasting_with_shap(df, forecast_months=3):
         last_row['Capex'] = projected_capex
         last_row['Cash_On_Hand'] = current_cash
     
-    return pd.DataFrame(forecast_data), pipeline, feature_cols, {'MAE': mae, 'R2': r2}, shap_values, X_test
+    return pd.DataFrame(forecast_data), pipeline, feature_cols, {'MAE': mae, 'R2': r2}, shap_values, X_test, feature_importance
 
 def create_forecast_comparison(df_original, df_traditional, df_ml, df_ai):
     """
