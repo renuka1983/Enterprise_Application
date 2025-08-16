@@ -11,8 +11,13 @@ import plotly.express as px
 from plotly.subplots import make_subplots
 
 # Import modules
-from cmo_hyper_personalization.data.synthetic_data import ManufacturingDataGenerator, generate_sample_data
-from cmo_hyper_personalization.models.ml_models import CampaignResponsePredictor, CustomerSegmentation
+try:
+    from .data.synthetic_data import ManufacturingDataGenerator, generate_sample_data
+    from .models.ml_models import CampaignResponsePredictor, CustomerSegmentation
+except ImportError:
+    # Fallback for direct execution or when imported from page wrapper
+    from data.synthetic_data import ManufacturingDataGenerator, generate_sample_data
+    from models.ml_models import CampaignResponsePredictor, CustomerSegmentation
 
 # Page configuration
 st.set_page_config(
