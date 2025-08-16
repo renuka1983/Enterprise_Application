@@ -188,22 +188,43 @@ def main():
     
     customer_df = st.session_state.customer_data
     market_df = st.session_state.market_data
-    summary = st.session_state.data_summary
+    summary = st.session_state.get('data_summary', {})
+    
+    # Ensure summary has required keys with defaults
+    if not summary:
+        summary = {
+            'total_customers': 0,
+            'campaign_response_rate': 0,
+            'total_revenue_potential': 0,
+            'high_value_customers': 0
+        }
     
     # Key metrics display
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
-        st.metric("Total Customers", f"{summary['total_customers']:,}")
+        try:
+            st.metric("Total Customers", f"{summary.get('total_customers', 0):,}")
+        except (KeyError, TypeError):
+            st.metric("Total Customers", "N/A")
     
     with col2:
-        st.metric("Campaign Response Rate", f"{summary['campaign_response_rate']:.1f}%")
+        try:
+            st.metric("Campaign Response Rate", f"{summary.get('campaign_response_rate', 0):.1f}%")
+        except (KeyError, TypeError):
+            st.metric("Campaign Response Rate", "N/A")
     
     with col3:
-        st.metric("Total Revenue Potential", f"₹{summary['total_revenue_potential']:.0f}L")
+        try:
+            st.metric("Total Revenue Potential", f"₹{summary.get('total_revenue_potential', 0):.0f}L")
+        except (KeyError, TypeError):
+            st.metric("Total Revenue Potential", "N/A")
     
     with col4:
-        st.metric("High-Value Customers", f"{summary['high_value_customers']:,}")
+        try:
+            st.metric("High-Value Customers", f"{summary.get('high_value_customers', 0):,}")
+        except (KeyError, TypeError):
+            st.metric("High-Value Customers", "N/A")
     
     # Main content based on selected approach
     if approach == "Traditional":
