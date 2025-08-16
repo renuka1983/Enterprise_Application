@@ -13,9 +13,20 @@ try:
     from .cfo_genai import simulate_openai_analysis, analyze_financial_health
 except ImportError:
     # Fallback for direct execution or when imported from page wrapper
-    from cfo_synthetic_data import generate_cfo_financial_data, create_financial_dashboard, save_to_csv
-    from cfo_forecasting import traditional_forecasting, ml_forecasting, ai_forecasting_with_shap, create_forecast_comparison
-    from cfo_genai import simulate_openai_analysis, analyze_financial_health
+    try:
+        from cfo_synthetic_data import generate_cfo_financial_data, create_financial_dashboard, save_to_csv
+        from cfo_forecasting import traditional_forecasting, ml_forecasting, ai_forecasting_with_shap, create_forecast_comparison
+        from cfo_genai import simulate_openai_analysis, analyze_financial_health
+    except ImportError:
+        # Final fallback: try importing from the current directory
+        import os
+        import sys
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        if current_dir not in sys.path:
+            sys.path.insert(0, current_dir)
+        from cfo_synthetic_data import generate_cfo_financial_data, create_financial_dashboard, save_to_csv
+        from cfo_forecasting import traditional_forecasting, ml_forecasting, ai_forecasting_with_shap, create_forecast_comparison
+        from cfo_genai import simulate_openai_analysis, analyze_financial_health
 
 # Page configuration
 st.set_page_config(
