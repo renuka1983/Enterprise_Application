@@ -393,13 +393,25 @@ def main():
         
         if st.button("🚀 Run AI Forecast"):
             with st.spinner("Running AI pipeline with SHAP analysis..."):
-                df_ai, pipeline, feature_cols, metrics, shap_values, X_test, feature_importance = ai_forecasting_with_shap(df, forecast_months)
-                st.session_state.df_ai = df_ai
-                st.session_state.pipeline = pipeline
-                st.session_state.ai_metrics = metrics
-                st.session_state.shap_values = shap_values
-                st.session_state.X_test = X_test
-                st.session_state.feature_importance = feature_importance
+                try:
+                    df_ai, pipeline, feature_cols, metrics, shap_values, X_test, feature_importance = ai_forecasting_with_shap(df, forecast_months)
+                    st.session_state.df_ai = df_ai
+                    st.session_state.pipeline = pipeline
+                    st.session_state.ai_metrics = metrics
+                    st.session_state.shap_values = shap_values
+                    st.session_state.X_test = X_test
+                    st.session_state.feature_importance = feature_importance
+                except ValueError as e:
+                    if "not enough values to unpack" in str(e):
+                        st.error("❌ Error in AI forecasting: Function returned fewer values than expected. This might be due to a compatibility issue.")
+                        st.info("💡 Try running the ML forecast first, or check if all required libraries are installed.")
+                        return
+                    else:
+                        st.error(f"❌ Error in AI forecasting: {str(e)}")
+                        return
+                except Exception as e:
+                    st.error(f"❌ Unexpected error in AI forecasting: {str(e)}")
+                    return
                 
                 st.success("✅ AI forecasting completed!")
                 
