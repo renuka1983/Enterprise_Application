@@ -440,7 +440,7 @@ def main():
                 """, unsafe_allow_html=True)
                 
                 if st.button(f"🚀 Run {method['name']}", key=f"btn_{method_key}", 
-                           disabled=st.session_state.is_running):
+                           disabled=st.session_state.get('is_running', False)):
                     st.session_state.selected_method = method_key
                     st.session_state.current_design_params = design_params
                     run_optimization(method_key, design_params)
@@ -463,7 +463,7 @@ def main():
                 """, unsafe_allow_html=True)
                 
                 if st.button(f"🚀 Run {method['name']}", key=f"btn_{method_key}", 
-                           disabled=st.session_state.is_running):
+                           disabled=st.session_state.get('is_running', False)):
                     st.session_state.selected_method = method_key
                     st.session_state.current_design_params = design_params
                     run_optimization(method_key, design_params)
