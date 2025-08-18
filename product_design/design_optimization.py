@@ -375,6 +375,16 @@ def create_performance_radar(results):
 
 # Main App
 def main():
+    # Initialize session state at the beginning of main function
+    if 'optimization_results' not in st.session_state:
+        st.session_state.optimization_results = None
+    if 'is_running' not in st.session_state:
+        st.session_state.is_running = False
+    if 'selected_method' not in st.session_state:
+        st.session_state.selected_method = None
+    if 'current_design_params' not in st.session_state:
+        st.session_state.current_design_params = None
+    
     # Header
     st.markdown("""
     # 🚴 Product Design Optimization
