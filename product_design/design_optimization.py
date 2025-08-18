@@ -494,10 +494,10 @@ def run_optimization(method_key, design_params):
 
 def show_results():
     """Display optimization results"""
-    if st.session_state.optimization_results is None:
+    if st.session_state.get('optimization_results') is None:
         return
     
-    results = st.session_state.optimization_results
+    results = st.session_state.get('optimization_results')
     
     st.header("📊 Optimization Results")
     
@@ -592,7 +592,7 @@ def show_results():
     st.plotly_chart(radar_fig, use_container_width=True)
 
 # Show results if they exist
-if st.session_state.optimization_results:
+if st.session_state.get('optimization_results'):
     show_results()
 
 # Comparison section (always visible)
