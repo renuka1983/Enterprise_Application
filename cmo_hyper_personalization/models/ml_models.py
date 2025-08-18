@@ -220,9 +220,7 @@ class CampaignResponsePredictor:
         # Create subplots
         fig = make_subplots(
             rows=2, cols=3,
-            subplot_titles=['Accuracy', 'Precision', 'Recall', 'F1 Score', 'ROC AUC', 'CV Score'],
-            specs=[[{"secondary_y": False}, {"secondary_y": False}, {"secondary_y": False}],
-                   [{"secondary_y": False}, {"secondary_y": False}, {"secondary_y": False}]]
+            subplot_titles=['Accuracy', 'Precision', 'Recall', 'F1 Score', 'ROC AUC', 'CV Score']
         )
         
         # Colors for models
@@ -280,8 +278,7 @@ class CampaignResponsePredictor:
         # Create subplots
         fig = make_subplots(
             rows=1, cols=len(models),
-            subplot_titles=[model.replace('_', ' ').title() for model in models],
-            specs=[[{"secondary_y": False}] * len(models)]
+            subplot_titles=[model.replace('_', ' ').title() for model in models]
         )
         
         for i, model in enumerate(models):

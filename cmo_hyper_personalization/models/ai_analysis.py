@@ -313,9 +313,7 @@ class AICompetitorAnalysis:
                 'Sentiment by Competitor',
                 'Customer Clusters',
                 'Revenue vs Sentiment'
-            ],
-            specs=[[{"secondary_y": False}, {"secondary_y": False}],
-                   [{"secondary_y": False}, {"secondary_y": False}]]
+            ]
         )
         
         competitor_data = analysis_results['competitor_data']
@@ -596,9 +594,7 @@ class MarketIntelligenceAI:
                 'Impact Score Distribution',
                 'Monthly Impact Trends',
                 'Segment Impact Analysis'
-            ],
-            specs=[[{"secondary_y": False}, {"secondary_y": False}],
-                   [{"secondary_y": False}, {"secondary_y": False}]]
+            ]
         )
         
         event_analysis = analysis_results.get('event_analysis', {})

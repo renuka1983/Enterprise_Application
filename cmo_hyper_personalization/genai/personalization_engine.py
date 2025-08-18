@@ -399,9 +399,7 @@ Ready to explore how {product} can transform your operations?
                 'Product Recommendation',
                 'Revenue Impact Projection',
                 'Personalization Insights'
-            ],
-            specs=[[{"secondary_y": False}, {"secondary_y": False}],
-                   [{"secondary_y": False}, {"secondary_y": False}]]
+            ]
         )
         
         profile = personalization_results['customer_profile']
