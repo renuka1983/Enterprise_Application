@@ -398,26 +398,41 @@ def show_ml_analysis(customer_df):
             st.success("✅ Models trained successfully!")
             st.rerun()
     
-    if 'ml_models' in st.session_state:
+    if 'ml_models' in st.session_state and st.session_state.ml_models is not None:
         predictor = st.session_state.ml_models
         
         # Model comparison
         st.subheader("📊 Model Performance Comparison")
-        comparison_fig = predictor.create_model_comparison_chart()
-        if comparison_fig:
-            st.plotly_chart(comparison_fig, use_container_width=True)
+        try:
+            comparison_fig = predictor.create_model_comparison_chart()
+            if comparison_fig:
+                st.plotly_chart(comparison_fig, use_container_width=True)
+        except AttributeError:
+            st.error("❌ ML models not properly initialized. Please train the models again.")
+        except Exception as e:
+            st.error(f"❌ Error creating model comparison chart: {str(e)}")
         
         # Feature importance
         st.subheader("🔍 Feature Importance Analysis")
-        importance_fig = predictor.create_feature_importance_chart()
-        if importance_fig:
-            st.plotly_chart(importance_fig, use_container_width=True)
+        try:
+            importance_fig = predictor.create_feature_importance_chart()
+            if importance_fig:
+                st.plotly_chart(importance_fig, use_container_width=True)
+        except AttributeError:
+            st.error("❌ ML models not properly initialized. Please train the models again.")
+        except Exception as e:
+            st.error(f"❌ Error creating feature importance chart: {str(e)}")
         
         # Model summary
         st.subheader("📋 Model Summary")
-        summary_df = predictor.get_model_summary()
-        if not summary_df.empty:
-            st.dataframe(summary_df, use_container_width=True)
+        try:
+            summary_df = predictor.get_model_summary()
+            if not summary_df.empty:
+                st.dataframe(summary_df, use_container_width=True)
+        except AttributeError:
+            st.error("❌ ML models not properly initialized. Please train the models again.")
+        except Exception as e:
+            st.error(f"❌ Error getting model summary: {str(e)}")
         
         # Individual customer prediction
         st.subheader("👤 Individual Customer Prediction")
@@ -440,12 +455,17 @@ def show_ml_analysis(customer_df):
         
         with col3:
             if selected_customer and st.button("🔮 Predict Response"):
-                prediction, probability = predictor.predict_campaign_response(customer_data)
-                
-                if prediction == 1:
-                    st.success(f"✅ **Likely to Respond**: {probability*100:.1f}% probability")
-                else:
-                    st.error(f"❌ **Unlikely to Respond**: {probability*100:.1f}% probability")
+                try:
+                    prediction, probability = predictor.predict_campaign_response(customer_data)
+                    
+                    if prediction == 1:
+                        st.success(f"✅ **Likely to Respond**: {probability*100:.1f}% probability")
+                    else:
+                        st.error(f"❌ **Unlikely to Respond**: {probability*100:.1f}% probability")
+                except AttributeError:
+                    st.error("❌ ML models not properly initialized. Please train the models again.")
+                except Exception as e:
+                    st.error(f"❌ Error making prediction: {str(e)}")
     else:
         st.info("🚀 Click the 'Train ML Models' button above to start training machine learning models for campaign response prediction.")
 
