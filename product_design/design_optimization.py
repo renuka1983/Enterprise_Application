@@ -301,9 +301,7 @@ def create_comparison_chart():
     # Create subplots
     fig = make_subplots(
         rows=2, cols=2,
-        subplot_titles=('Weight Comparison', 'Time Comparison', 'Cost Comparison', 'Accuracy Comparison'),
-        specs=[[{"secondary_y": False}, {"secondary_y": False}],
-               [{"secondary_y": False}, {"secondary_y": False}]]
+        subplot_titles=('Weight Comparison', 'Time Comparison', 'Cost Comparison', 'Accuracy Comparison')
     )
     
     colors = ['#757575', '#2196F3', '#9C27B0', '#4CAF50']
