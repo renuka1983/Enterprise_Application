@@ -86,7 +86,7 @@ class CampaignResponsePredictor:
         self.encoders['region'] = le_region
         self.scalers['main'] = scaler
         
-        return X_train_scaled, X_test_scaled, y_train, y_test, feature_cols, scaler
+        return X_train_scaled, X_test_scaled, y_train, y_test, feature_cols, scaler, self.encoders
     
     def train_logistic_regression(self, X_train, X_test, y_train, y_test, feature_names):
         """
