@@ -11,24 +11,30 @@ import plotly.express as px
 from plotly.subplots import make_subplots
 
 # Import modules
+import os
+import sys
+
+# Add the current directory to Python path to ensure imports work
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
+
 try:
-    # Layer 1: Relative imports (package context)
+    # Try relative imports first (when used as a package)
     from .data.synthetic_data import ManufacturingDataGenerator, generate_sample_data
     from .models.ml_models import CampaignResponsePredictor, CustomerSegmentation
 except ImportError:
     try:
-        # Layer 2: Absolute imports (direct execution)
+        # Try absolute imports (when used directly)
         from data.synthetic_data import ManufacturingDataGenerator, generate_sample_data
         from models.ml_models import CampaignResponsePredictor, CustomerSegmentation
     except ImportError:
-        # Layer 3: Dynamic path addition (final fallback)
-        import os
-        import sys
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        if current_dir not in sys.path:
-            sys.path.insert(0, current_dir)
-        from data.synthetic_data import ManufacturingDataGenerator, generate_sample_data
-        from models.ml_models import CampaignResponsePredictor, CustomerSegmentation
+        # Final fallback - add parent directory and try again
+        parent_dir = os.path.dirname(current_dir)
+        if parent_dir not in sys.path:
+            sys.path.insert(0, parent_dir)
+        from cmo_hyper_personalization.data.synthetic_data import ManufacturingDataGenerator, generate_sample_data
+        from cmo_hyper_personalization.models.ml_models import CampaignResponsePredictor, CustomerSegmentation
 
 # Page configuration
 st.set_page_config(
